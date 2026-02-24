@@ -4,7 +4,7 @@ import {
 
 const store = createStore( {
     state: {
-        url: "https://api-chatmultiuser.vercel.app",
+        url: "http://localhost:9000",
         loginState: false,
         data: null
     },

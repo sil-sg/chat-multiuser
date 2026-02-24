@@ -1,10 +1,10 @@
 <template>
-    <div class="w-screen h-screen m-0 p-0 flex justify-center items-center bg-[#121212]">
+    <div class="w-screen min-h-screen h-auto m-0 p-0 flex justify-center items-center bg-[#121212]">
         <Message @close="showMessage = false" v-if="showMessage === true" :message="message" />
         
         <form 
         @submit.stop.prevent="next"
-        class="fadeInUp bg-[#242424] rounded-2xl w-10/11 max-w-md p-6 text-md flex flex-col gap-6">
+        class="fadeInUp bg-[#242424] rounded-2xl w-10/11 sm:my-16 max-w-xs p-6 text-md flex flex-col gap-6">
             <h2 class="text-3xl text-slate-100 mb-3.5">{{ textMain }}</h2>
             
             <label for="email" class="text-sm text-slate-100">
@@ -94,7 +94,7 @@ export default {
         async loginAccount() {
             this.isLoading = true
             try {
-                const { data } = await axios.get(`${this.$store.state.url}/users/${this.name}/${this.email}/${this.password}`)
+                const { data } = await axios.post(`${this.$store.state.url}/login`, { name: this.name, email: this.email, password: this.password })
                 
                 if (data.message === 'sucess') {
                     this.$store.dispatch('setData', data.content)

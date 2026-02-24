@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-[#121212] overflow-hidden w-screen h-screen m-0 p-0 flex flex-col justify-between">
+    <div class="bg-[#121212] overflow-hidden w-screen min-h-screen h-auto m-0 p-0 flex flex-col justify-between">
         
         <Message @close="showMessage = false" :message="notification" v-if="showMessage === true" />
         
@@ -21,24 +21,6 @@
                 <div 
                 v-for="i in messages"
                 :key="i._id"
-                @pointerover="() => {
-                    textForCopy = i.content
-                    touchVLongPress = true
-                }"
-                @pointerout="() => {
-                    textForCopy = ''
-                    touchVLongPress = false
-                    countVLongPress = 0
-                }"
-                @mouseover="() => {
-                    textForCopy = i.content
-                    touchVLongPress = true
-                }"
-                @mouseout="() => {
-                    textForCopy = ''
-                    touchVLongPress = false
-                    countVLongPress = 0
-                }"
                 :class="[i.senderId === id ? 'fadeInRight rounded-tr-none self-end block space-y-2 p-4 bg-blue-400 rounded-2xl border-l-3 border-l-blue-400 text-gray-200 max-w-8/10' : 'fadeInLeft justify-self-end block space-y-2 p-4 bg-gray-700 rounded-tl-none rounded-2xl border-l-3 border-l-blue-400 text-gray-200 max-w-8/10']"
                 >
                     <h3 class="text-pink-600 text-md">~ {{i.senderName}}</h3>
@@ -50,17 +32,20 @@
                     </div>
                 </div>
                 
+                <br><br><br><br><br><br>
             </div>
         </div>
         
-        <form @submit.stop.prevent="verify" class="fadeInUp px-2 pb-6 w-full max-w-md mx-auto flex relative bg-transparent">
-            <textarea v-model="value" class="outline-none flex-1 bg-slate-50 rounded-xl p-3 resize-none h-auto max-h-80 overflow-hidden" placeholder="Digite sua mensagem..."></textarea>
-            
-            <button :disabled="isLoading === true" type="submit" class="disabled:brightness-75 flex justify-center items-center z-10 absolute right-3 top-[50%] translate-y-[-50%] rounded-full aspect-[1/1] p-1.5 bg-[#1172d5aa] w-10">
-                <Loading v-if="isLoading === true" />
-                <svg v-else class="w-full aspect-[1/1]" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M2.33045 8.38999C0.250452 11.82 9.42048 14.9 9.42048 14.9C9.42048 14.9 12.5005 24.07 15.9305 21.99C19.5705 19.77 23.9305 6.13 21.0505 3.27C18.1705 0.409998 4.55045 4.74999 2.33045 8.38999Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M15.1999 9.12L9.41992 14.9" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-            </button>
-        </form>
+        <div class="fixed bottom-3.5 left-0 right-0 flex justify-center items-center mx-1 w-full">
+            <form @submit.stop.prevent="verify" class="w-full mx-auto flex relative bg-transparent max-w-md">
+                <textarea v-model="value" class="outline-none flex-1 bg-slate-50 rounded-xl p-3 resize-none h-auto max-h-80 overflow-hidden" placeholder="Digite sua mensagem..."></textarea>
+                
+                <button :disabled="isLoading === true" type="submit" class="disabled:brightness-75 flex justify-center items-center z-10 absolute right-3 top-[50%] translate-y-[-50%] rounded-full aspect-[1/1] p-1.5 bg-[#1172d5aa] w-10">
+                    <Loading v-if="isLoading === true" />
+                    <svg v-else class="w-full aspect-[1/1]" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M2.33045 8.38999C0.250452 11.82 9.42048 14.9 9.42048 14.9C9.42048 14.9 12.5005 24.07 15.9305 21.99C19.5705 19.77 23.9305 6.13 21.0505 3.27C18.1705 0.409998 4.55045 4.74999 2.33045 8.38999Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M15.1999 9.12L9.41992 14.9" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                </button>
+            </form>
+        </div>
         
     </div>
 </template>
@@ -88,7 +73,18 @@ export default {
             countVLongPress: 0,
             timerVLongPress: 50,
             touchVLongPress: false,
-            textForCopy: ''
+            textForCopy: '',
+            
+            dash: `@pointerdown="() => {
+                    textForCopy = i.content
+                    touchVLongPress = true
+                }"
+                @pointerup="() => {
+                    textForCopy = ''
+                    touchVLongPress = false
+                    countVLongPress = 0
+                }"
+            `
         }
     },
     methods: {
